@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quiz", "Quiz\Quiz.csproj", "{6B8D6AB8-88F2-47A9-9EF3-66566C1662B5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47B22C6F-CD41-4CF9-B26C-1EE598CF2EF6}"
+	ProjectSection(SolutionItems) = preProject
+		Quiz\bin\Debug\net5.0\CSTR.json = Quiz\bin\Debug\net5.0\CSTR.json
+		Quiz\bin\Debug\net5.0\geography.json = Quiz\bin\Debug\net5.0\geography.json
+		Quiz\bin\Debug\net5.0\history.json = Quiz\bin\Debug\net5.0\history.json
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B8D6AB8-88F2-47A9-9EF3-66566C1662B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B8D6AB8-88F2-47A9-9EF3-66566C1662B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B8D6AB8-88F2-47A9-9EF3-66566C1662B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B8D6AB8-88F2-47A9-9EF3-66566C1662B5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E5F76E24-A946-4D4E-B3E0-ACFBA49E115B}
+	EndGlobalSection
+EndGlobal
