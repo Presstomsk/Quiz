@@ -19,7 +19,7 @@ namespace Quiz
         public void Open() => db.Open();
         public void Close() => db.Close();        
 
-        public bool LogPasCheck(User user)
+        public bool LogPasCheck(User user)//Убрать консоль
         {            
                 Open();                
                 var sql = $"SELECT login, password FROM tab_user WHERE login='{user.Login}' AND password='{user.Password}';";
@@ -37,7 +37,7 @@ namespace Quiz
                 return true;           
 
         }
-        public bool LoginCheck(User user)
+        public bool LoginCheck(User user)//Убрать консоль
         {
                 Open();
                 var sql = $"SELECT login FROM tab_user WHERE login='{user.Login}';";
@@ -100,25 +100,24 @@ namespace Quiz
         {
             Open();
             var list = new List<Top20List>();
-            var sql = @$"SELECT login,SUM(score) FROM tab_log
-                          WHERE test_name='{TestName}'
-                             GROUP BY login
-                                ORDER BY SUM(score) DESC LIMIT 20; ";
+            var sql = @$"SELECT login,score FROM tab_log
+                            WHERE test_name='{TestName}'
+                                ORDER BY score DESC LIMIT 20;";
             command.CommandText = sql;
             var res = command.ExecuteReader();
             if (!res.HasRows) return null;
             while (res.Read())
             {
                 var login = res.GetString("login");
-                var sumScore = res.GetUInt32("SUM(score)");              
-                list.Add(new Top20List { Login = login, SumScore = sumScore });
+                var score = res.GetUInt32("score");              
+                list.Add(new Top20List { Login = login, Score = score });
 
             }
             Close();
             return list;
         }
 
-        public bool LoginChange(User user)
+        public bool LoginChange(User user) //убрать консоль
         {
             Console.Write("Новый пароль: ");
             user.Password = Console.ReadLine();
@@ -131,7 +130,7 @@ namespace Quiz
             Close();
             return num!=0;
         }
-        public bool DateOfBirthChange(User user)
+        public bool DateOfBirthChange(User user) //убрать консоль
         {
             Console.Write("Новая дата рождения: ");
             var str = Console.ReadLine();

@@ -22,7 +22,7 @@ namespace Quiz
             buffer.Close();
             return item;
         }
-        public string GetTest(Questions questions,string path, out uint score, out string testName)
+        public string GetTest(Questions questions,string path, out uint score, out string testName) //Убрать консоль
         {
             score = 0;
             testName = null;
