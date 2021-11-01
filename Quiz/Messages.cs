@@ -88,6 +88,8 @@ namespace Quiz
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("У вас нет аккаунта! Пройдите регистрацию");
             Console.ResetColor();
+            Messages.TextNext();
+            Console.ReadKey();
         }
 
         public static void TextErrorRegistration()
@@ -95,8 +97,12 @@ namespace Quiz
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Введённый вами логин уже зарегистрирован! Пройдите регистрацию повторно");
             Console.ResetColor();
+            Messages.TextNext();
+            Console.ReadKey();
         }
         public static void TextNext()=> Console.WriteLine("Для продолжения нажмите любую клавишу.");
+
+     
           
     }
 }

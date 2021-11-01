@@ -19,17 +19,14 @@ namespace Quiz
         public void Open() => db.Open();
         public void Close() => db.Close();        
 
-        public bool LogPasCheck(User user)//Убрать консоль
+        public bool LogPasCheck(User user)
         {            
                 Open();                
                 var sql = $"SELECT login, password FROM tab_user WHERE login='{user.Login}' AND password='{user.Password}';";
                 command.CommandText = sql;
                 var res = command.ExecuteReader();
                 if (!res.HasRows)
-                {
-                    Messages.TextErrorLogin();
-                    Messages.TextNext();
-                    Console.ReadKey();
+                {                    
                     Close();
                     return false;
                 }                
@@ -37,17 +34,14 @@ namespace Quiz
                 return true;           
 
         }
-        public bool LoginCheck(User user)//Убрать консоль
+        public bool LoginCheck(User user)
         {
                 Open();
                 var sql = $"SELECT login FROM tab_user WHERE login='{user.Login}';";
                 command.CommandText = sql;
                 var res = command.ExecuteReader();
                 if (res.HasRows)
-                {
-                    Messages.TextErrorRegistration();
-                    Messages.TextNext();
-                    Console.ReadKey();
+                {                    
                     Close();
                     return false;
                 }
@@ -117,10 +111,9 @@ namespace Quiz
             return list;
         }
 
-        public bool LoginChange(User user) //убрать консоль
-        {
-            Console.Write("Новый пароль: ");
-            user.Password = Console.ReadLine();
+        public bool LoginChange(User user, string str) 
+        {            
+            user.Password = str;
             Open();
             var sql = @$"UPDATE tab_user
                            SET password='{user.Password}'
@@ -130,10 +123,8 @@ namespace Quiz
             Close();
             return num!=0;
         }
-        public bool DateOfBirthChange(User user) //убрать консоль
+        public bool DateOfBirthChange(User user, string str) 
         {
-            Console.Write("Новая дата рождения: ");
-            var str = Console.ReadLine();
             user.DateOfBirth = DateTime.Parse(str);            
             Open();
             var sql = @$"UPDATE tab_user

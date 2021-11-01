@@ -4,12 +4,12 @@ using System.Collections.Generic;
 namespace Quiz
 {
     public delegate User Operation();
-    public delegate bool Changes(User user);
+    public delegate bool Changes(User user,string str);
     class Program
     {
         
         public static Dictionary<string, Operation> AuthRegMenu;
-        public static Dictionary<string, string> TestNameMenu, Path;
+        public static Dictionary<string, string> TestNameMenu, Path, changeText;
         public static Dictionary<string, Changes> ChangesMenu;
 
         static void Main()
@@ -42,6 +42,11 @@ namespace Quiz
                 {"2",db.DateOfBirthChange}
             };
 
+            changeText = new Dictionary<string, string>
+            {
+                {"1","Новый пароль: "},
+                {"2","Новая дата рождения: "}
+            };
 
 
 
@@ -51,8 +56,16 @@ namespace Quiz
                 user = Menu.AuthRegChoiceMenu(key, AuthRegMenu);//Регистрация или авторизация
             } while (user == null);
 
-            if(user.DateOfBirth==null) choice = db.LogPasCheck(user); //Проверка данных пользователя
-            else choice = db.LoginCheck(user);
+            if (user.DateOfBirth == null) //Проверка данных пользователя
+            {
+                choice = db.LogPasCheck(user);
+                if (!choice) Messages.TextErrorLogin();               
+            }
+            else
+            { 
+                choice = db.LoginCheck(user);
+                if (!choice) Messages.TextErrorRegistration();              
+            }
 
             if (!choice)
             {
@@ -60,7 +73,8 @@ namespace Quiz
                 {
                     user = Menu.Registration();  //Регитрация
                     choice = db.LoginCheck(user);
-                    if (choice) db.NewUser(user);                
+                    if (choice) db.NewUser(user);
+                    else Messages.TextErrorRegistration();                    
                 } while (!choice);
             }
             if (choice)
@@ -83,7 +97,7 @@ namespace Quiz
                             Menu.Top20ResultShow(TestNameMenu, db);
                             break;
                         case "4"://Изменить настройки: дата рождения и пароль
-                            Menu.ChangeSettings(user, ChangesMenu);
+                            Menu.ChangeSettings(user, ChangesMenu, changeText);
                             break;
                         case "5"://Выход
                             flag = true;

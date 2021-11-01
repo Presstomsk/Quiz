@@ -47,15 +47,16 @@ namespace Quiz
             return dict[key];
         }
 
-        public static bool ChangesChoiceMenu(string key, Dictionary<string, Changes> dict, User user )
+        public static bool ChangesChoiceMenu(string key, Dictionary<string, Changes> dict, Dictionary<string,string> changeText, User user )
         {
             if (!dict.ContainsKey(key))
             {
                 Messages.TextErrorChoice();
                 return false;
             }
-
-            return dict[key](user);
+            Console.Write($"{changeText[key]}");
+            var str = Console.ReadLine();
+            return dict[key](user, str);
         }
 
         public static void StartQuiz(User user,Dictionary<string,string> testNameMenu, Dictionary<string, string> path, DataBaseConnect db) //Начало викторины
@@ -69,11 +70,34 @@ namespace Quiz
                 str = TestChoiceMenu(nameTestKey, testNameMenu);
 
             } while (str == null);
-            Console.WriteLine(test.GetTest(test, path[str], out uint score, out string testName));
+            Console.WriteLine(GetTest(test, path[str], out uint score, out string testName));
             db.ScoreHistory(user, testName, score);
             Console.WriteLine();
             Messages.TextNext();
             Console.ReadKey();
+        }
+
+        public static string GetTest(Questions questions, string path, out uint score, out string testName)
+        {
+            score = 0;
+            testName = null;
+            var questCounter = 0;
+            var deserializedQuestions = questions.QuestionsDeserialization($"{path}");
+            foreach (var quest in deserializedQuestions)
+            {
+                questCounter++;
+                testName = quest.TestName;
+                Console.WriteLine(quest.Question);
+                foreach (var ans in quest.Answers)
+                {
+                    Console.WriteLine($"{ans.Key} - {ans.Value}");
+                }
+                Console.WriteLine("Укажите правильный ответ:");
+                var ant = Convert.ToUInt32(Console.ReadLine());
+                if (ant == quest.TrueAnswer) score++;
+            }
+
+            return $"Ваш результат: {score} из {questCounter}";
         }
 
         public static void AllQuizResultShow(User user,DataBaseConnect db)
@@ -112,7 +136,7 @@ namespace Quiz
             Console.ReadKey();
         }
 
-        public static void ChangeSettings(User user,Dictionary<string,Changes> changesMenu)
+        public static void ChangeSettings(User user,Dictionary<string,Changes> changesMenu, Dictionary<string,string> changeText)
         {
             string key;
             bool choice;
@@ -120,7 +144,7 @@ namespace Quiz
             {
                 Messages.ChangesTextMenu();
                 key = Console.ReadLine();
-                choice = Menu.ChangesChoiceMenu(key, changesMenu, user);
+                choice = ChangesChoiceMenu(key, changesMenu, changeText,  user);
             } while (!choice);
             Console.WriteLine();
             Messages.TextNext();

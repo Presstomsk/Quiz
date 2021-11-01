@@ -1,5 +1,5 @@
 ﻿
-using System;
+
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Json;
@@ -22,27 +22,6 @@ namespace Quiz
             buffer.Close();
             return item;
         }
-        public string GetTest(Questions questions,string path, out uint score, out string testName) //Убрать консоль
-        {
-            score = 0;
-            testName = null;
-            var questCounter = 0;            
-            var deserializedQuestions = questions.QuestionsDeserialization($"{path}");
-            foreach (var quest in deserializedQuestions)
-            {
-                questCounter++;
-                testName = quest.TestName;
-                Console.WriteLine(quest.Question);
-                foreach (var ans in quest.Answers)
-                {
-                    Console.WriteLine($"{ans.Key} - {ans.Value}");
-                }
-                Console.WriteLine("Укажите правильный ответ:");
-                var ant = Convert.ToUInt32(Console.ReadLine());
-                if (ant == quest.TrueAnswer) score++;                
-            }
-             
-            return $"Ваш результат: {score} из {questCounter}";
-        }
+       
     }
 }
