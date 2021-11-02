@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Text.RegularExpressions;
 
 namespace Quiz
 {
@@ -80,6 +80,7 @@ namespace Quiz
         public static string GetTest(Questions questions, string path, out uint score, out string testName)
         {
             score = 0;
+            uint numberOfQuestions = 0;            
             testName = null;
             var questCounter = 0;
             var deserializedQuestions = questions.QuestionsDeserialization($"{path}");
@@ -91,13 +92,44 @@ namespace Quiz
                 foreach (var ans in quest.Answers)
                 {
                     Console.WriteLine($"{ans.Key} - {ans.Value}");
+                    numberOfQuestions++;
                 }
-                Console.WriteLine("Укажите правильный ответ:");
-                var ant = Convert.ToUInt32(Console.ReadLine());
-                if (ant == quest.TrueAnswer) score++;
+                
+                    Console.Write("Укажите правильный ответ:");
+                   var answer = Console.ReadLine();
+                do
+                {
+
+                    if (StringCheck(answer, RegexAnswerPattern(numberOfQuestions)))
+                    {
+                        var ant = Convert.ToUInt32(answer);
+                        if (ant == quest.TrueAnswer) score++;
+                    }
+                    else
+                    { 
+                        Messages.TextErrorChoice();
+                        Console.Write("Укажите правильный ответ:");
+                        answer = Console.ReadLine();                        
+                    }
+                } while (!StringCheck(answer, RegexAnswerPattern(numberOfQuestions)));
+                
             }
 
             return $"Ваш результат: {score} из {questCounter}";
+        }
+
+        public static string RegexAnswerPattern(uint numberOfQuestions)
+        {
+            return $"[1-{numberOfQuestions}]"+"{1}";
+        }
+
+        public static bool StringCheck(string info, string pattern)
+        {
+            if (Regex.IsMatch(info, pattern, RegexOptions.IgnoreCase))
+            {
+                return true;
+            }
+            return false;
         }
 
         public static void AllQuizResultShow(User user,DataBaseConnect db)
