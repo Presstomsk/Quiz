@@ -22,18 +22,70 @@ namespace Quiz
 
         public static User Entrance()
         {
-            Messages.AuthorizationText();
-            var login = Messages.Login();
-            var password = Messages.Password();
+            string pattern = "^[0-9a-zA-Z]+$";
+            bool checkLogin, checkPassword;
+            string login, password;
+            do
+            {
+                Messages.AuthorizationText();
+                login = Messages.Login();
+                checkLogin = Regex.IsMatch(login,pattern);
+                password = Messages.Password();
+                checkPassword = Regex.IsMatch(password, pattern);
+                if (!checkLogin)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Логин не соответствует алфавитно-цифровому формату");
+                    Console.ResetColor();
+                }
+                if (!checkPassword)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Пароль не соответствует алфавитно-цифровому формату");
+                    Console.ResetColor();
+                }
+                if (!checkLogin || !checkPassword) Console.ReadKey();
+            } while (!checkLogin || !checkPassword);
             return new User(login,password);
         }
         public static User Registration()
         {
-            Messages.RegistrationText();
-            var login = Messages.Login();
-            var password = Messages.Password();
-            var date_of_birth = DateTime.Parse(Messages.Date_of_birth());
-            return new User(login, password, date_of_birth);            
+            string pattern = "^[0-9a-zA-Z]+$";            
+            bool checkLogin, checkPassword, checkDate;
+            string login, password, date_of_birth;
+            DateTime d_of_birth;
+            do
+            {
+                Messages.RegistrationText();
+                login = Messages.Login();
+                checkLogin = Regex.IsMatch(login, pattern);
+                password = Messages.Password();
+                checkPassword = Regex.IsMatch(password, pattern);
+                date_of_birth = Messages.Date_of_birth();
+                checkDate = DateTime.TryParse(date_of_birth,out DateTime dtResult);
+                d_of_birth = dtResult;
+                if (!checkLogin)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Логин не соответствует алфавитно-цифровому формату");
+                    Console.ResetColor();
+                }
+                if (!checkPassword)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Пароль не соответствует алфавитно-цифровому формату");
+                    Console.ResetColor();
+                }
+                if (!checkDate)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Дата  введена некорректно");
+                    Console.ResetColor();
+                }
+                if (!checkLogin || !checkPassword || !checkDate) Console.ReadKey();
+            } while (!checkLogin || !checkPassword || !checkDate);
+            
+            return new User(login, password, d_of_birth);            
         }
 
         public static string TestChoiceMenu(string key, Dictionary<string, string> dict)
