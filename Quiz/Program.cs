@@ -64,7 +64,9 @@ namespace Quiz
             else
             { 
                 choice = db.LoginCheck(user);
-                if (!choice) Messages.TextErrorRegistration();              
+                if (!choice) Messages.TextErrorRegistration();
+                else db.NewUser(user);
+                
             }
 
             if (!choice)
@@ -80,10 +82,12 @@ namespace Quiz
             if (choice)
             {
                 flag = false;
+                
                 do
                 {
                     Messages.AccTextMenu(user);//Личный кабинет пользователя
-                    var key = Console.ReadLine();               
+                    string key;
+                    key = Console.ReadLine();
                
                     switch (key)
                     {
@@ -101,6 +105,11 @@ namespace Quiz
                             break;
                         case "5"://Выход
                             flag = true;
+                            break;
+                        default:
+                            Messages.TextErrorChoice();
+                            Messages.TextNext();
+                            Console.ReadKey();                           
                             break;
                     }
                 } while (!flag);

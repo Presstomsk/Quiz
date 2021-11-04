@@ -101,13 +101,41 @@ namespace Quiz
 
         public static bool ChangesChoiceMenu(string key, Dictionary<string, Changes> dict, Dictionary<string,string> changeText, User user )
         {
+            bool checkLogin=true;
+            bool checkDate=true;
+            string str;            
+            string pattern = "^[0-9a-zA-Z]+$";
             if (!dict.ContainsKey(key))
             {
                 Messages.TextErrorChoice();
                 return false;
             }
-            Console.Write($"{changeText[key]}");
-            var str = Console.ReadLine();
+            do
+            {
+                Console.Write($"{changeText[key]}");
+                str = Console.ReadLine();
+                if (key == "1")
+                {
+                    checkLogin = Regex.IsMatch(str, pattern);
+                    if (!checkLogin)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Логин не соответствует алфавитно-цифровому формату");
+                        Console.ResetColor();
+                    }
+                }
+                if (key == "2")
+                {
+                    checkDate = DateTime.TryParse(str, out DateTime dtResult);
+                    if (!checkDate)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Дата  введена некорректно");
+                        Console.ResetColor();
+                    }
+                }
+                if (!checkLogin || !checkDate) Console.ReadKey();
+            } while (!checkLogin||!checkDate);
             return dict[key](user, str);
         }
 
@@ -132,7 +160,7 @@ namespace Quiz
         public static string GetTest(Questions questions, string path, out uint score, out string testName)
         {
             score = 0;
-            uint numberOfQuestions = 0;            
+            string numberOfQuestions=null;            
             testName = null;
             var questCounter = 0;
             var deserializedQuestions = questions.QuestionsDeserialization($"{path}");
@@ -144,7 +172,7 @@ namespace Quiz
                 foreach (var ans in quest.Answers)
                 {
                     Console.WriteLine($"{ans.Key} - {ans.Value}");
-                    numberOfQuestions++;
+                    numberOfQuestions = ans.Key;
                 }
                 
                     Console.Write("Укажите правильный ответ:");
@@ -152,7 +180,7 @@ namespace Quiz
                 do
                 {
 
-                    if (StringCheck(answer, RegexAnswerPattern(numberOfQuestions)))
+                    if (Regex.IsMatch(answer, PatternString(numberOfQuestions)))
                     {
                         var ant = Convert.ToUInt32(answer);
                         if (ant == quest.TrueAnswer) score++;
@@ -163,26 +191,20 @@ namespace Quiz
                         Console.Write("Укажите правильный ответ:");
                         answer = Console.ReadLine();                        
                     }
-                } while (!StringCheck(answer, RegexAnswerPattern(numberOfQuestions)));
+                } while (!Regex.IsMatch(answer, PatternString(numberOfQuestions)));
                 
             }
 
             return $"Ваш результат: {score} из {questCounter}";
         }
 
-        public static string RegexAnswerPattern(uint numberOfQuestions)
+        public static string PatternString(string numberOfQuestions)
         {
-            return $"[1-{numberOfQuestions}]"+"{1}";
+            return $"^[1-{numberOfQuestions}]" + "{1}$";
         }
+       
 
-        public static bool StringCheck(string info, string pattern)
-        {
-            if (Regex.IsMatch(info, pattern, RegexOptions.IgnoreCase))
-            {
-                return true;
-            }
-            return false;
-        }
+       
 
         public static void AllQuizResultShow(User user,DataBaseConnect db)
         {

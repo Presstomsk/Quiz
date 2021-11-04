@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Quiz
 {
@@ -112,16 +113,18 @@ namespace Quiz
         }
 
         public bool LoginChange(User user, string str) 
-        {            
-            user.Password = str;
-            Open();
-            var sql = @$"UPDATE tab_user
+        {
+            
+                user.Password = str;
+                Open();
+                var sql = @$"UPDATE tab_user
                            SET password='{user.Password}'
                              WHERE login='{user.Login}';";
-            command.CommandText = sql;
-            var num=command.ExecuteNonQuery();
-            Close();
-            return num!=0;
+                command.CommandText = sql;
+                var num = command.ExecuteNonQuery();
+                Close();
+                return num != 0;
+            
         }
         public bool DateOfBirthChange(User user, string str) 
         {
